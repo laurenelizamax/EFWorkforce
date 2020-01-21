@@ -14,7 +14,8 @@ namespace EFWorkforce.Models
         public string Name { get; set; }
         public int Budget { get; set; }
 
-        [Display(Name = "Size of Department")]
+        [Display(Name = "Employees")]
         public List<Employee> Employees { get; set; } = new List<Employee>();
+
     }
 }

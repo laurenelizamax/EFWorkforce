@@ -1,30 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EFWorkforce.Models
+namespace EFWorkforce.Models.ViewModels
 {
-    public class Employee
+    public class EmployeeDetailViewModel
     {
-        public int Id { get; set; }
-
-        [Display(Name = "First Name")]
-        [Required]
+        public int Id{ get; set; }
         public string FirstName { get; set; }
-
-        [Display(Name = "Last Name")]
-        [Required]
         public string LastName { get; set; }
-
         public int DepartmentId { get; set; }
-
-        [Display(Name = "Is Supervisor")]
-        public bool IsSupervisor { get; set; }
         public int ComputerId { get; set; }
+        public bool IsSupervisor { get; set; }
+        public string Email { get; set; }
+
         public Department Department { get; set; }
         public Computer Computer { get; set; }
-        public string Email { get; set; }
+        public List<TrainingProgram> TrainingPrograms { get; set; }
     }
 }

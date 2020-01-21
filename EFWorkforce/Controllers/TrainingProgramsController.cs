@@ -10,23 +10,30 @@ using EFWorkforce.Models;
 
 namespace EFWorkforce.Controllers
 {
-    public class ComputersController : Controller
+    public class TrainingProgramsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ComputersController(ApplicationDbContext context)
+        public TrainingProgramsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Computers
+        // GET: TrainingPrograms
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Computer.ToListAsync());
-
+            var trainingPrograms = _context.TrainingProgram.Where(tp => tp.StartDate >= DateTime.Now);
+            return View(await trainingPrograms.ToListAsync());
         }
 
-        // GET: Computers/Details/5
+        // GET: PAST TrainingPrograms
+        public async Task<IActionResult> PastIndex()
+        {
+            var trainingPrograms = _context.TrainingProgram.Where(tp => tp.StartDate <= DateTime.Now);
+            return View(await trainingPrograms.ToListAsync());
+        }
+
+        // GET: TrainingPrograms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +41,40 @@ namespace EFWorkforce.Controllers
                 return NotFound();
             }
 
-            var computer = await _context.Computer
+            var trainingProgram = await _context.TrainingProgram
+                //.Include(tp => tp.)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (computer == null)
+            if (trainingProgram == null)
             {
                 return NotFound();
             }
 
-            return View(computer);
+            return View(trainingProgram);
         }
 
-        // GET: Computers/Create
+        // GET: TrainingPrograms/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Computers/Create
+        // POST: TrainingPrograms/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PurchaseDate,DecomissionDate,Make,Model")] Computer computer)
+        public async Task<IActionResult> Create([Bind("Id,Name,StartDate,EndDate,MaxAttendees")] TrainingProgram trainingProgram)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(computer);
+                _context.Add(trainingProgram);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(computer);
+            return View(trainingProgram);
         }
 
-        // GET: Computers/Edit/5
+        // GET: TrainingPrograms/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +82,22 @@ namespace EFWorkforce.Controllers
                 return NotFound();
             }
 
-            var computer = await _context.Computer.FindAsync(id);
-            if (computer == null)
+            var trainingProgram = await _context.TrainingProgram.FindAsync(id);
+            if (trainingProgram == null)
             {
                 return NotFound();
             }
-            return View(computer);
+            return View(trainingProgram);
         }
 
-        // POST: Computers/Edit/5
+        // POST: TrainingPrograms/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PurchaseDate,DecomissionDate,Make,Model")] Computer computer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate,MaxAttendees")] TrainingProgram trainingProgram)
         {
-            if (id != computer.Id)
+            if (id != trainingProgram.Id)
             {
                 return NotFound();
             }
@@ -98,12 +106,12 @@ namespace EFWorkforce.Controllers
             {
                 try
                 {
-                    _context.Update(computer);
+                    _context.Update(trainingProgram);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ComputerExists(computer.Id))
+                    if (!TrainingProgramExists(trainingProgram.Id))
                     {
                         return NotFound();
                     }
@@ -114,10 +122,10 @@ namespace EFWorkforce.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(computer);
+            return View(trainingProgram);
         }
 
-        // GET: Computers/Delete/5
+        // GET: TrainingPrograms/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,35 +133,30 @@ namespace EFWorkforce.Controllers
                 return NotFound();
             }
 
-            var computer = await _context.Computer
+            var trainingProgram = await _context.TrainingProgram
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (computer == null)
+            if (trainingProgram == null)
             {
                 return NotFound();
             }
 
-            return View(computer);
+            return View(trainingProgram);
         }
 
-        // POST: Computers/Delete/5
+        // POST: TrainingPrograms/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var computer = await _context.Computer
-                .FindAsync(id);
-            _context.Computer
-                .Remove(computer);
+            var trainingProgram = await _context.TrainingProgram.FindAsync(id);
+            _context.TrainingProgram.Remove(trainingProgram);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ComputerExists(int id)
+        private bool TrainingProgramExists(int id)
         {
-            return _context.Computer.Any(e => e.Id == id);
+            return _context.TrainingProgram.Any(e => e.Id == id);
         }
     }
 }
-
-  //.Where(c => c.DecomissionDate == null)
-  //              .Where(c => c.Employee == null);
