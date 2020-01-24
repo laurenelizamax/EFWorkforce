@@ -37,6 +37,8 @@ namespace EFWorkforce.Controllers
             var employee = await _context.Employee
                 .Include(e => e.Computer)
                 .Include(e => e.Department)
+                .Include(e => e.EmployeeTrainings)
+                 .ThenInclude(et => et.TrainingProgram)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
@@ -160,6 +162,35 @@ namespace EFWorkforce.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: Comments/Create
+        [HttpGet("Employees/AddTProgram/{tpId}")]
+        public IActionResult AddTProgram([FromRoute]int id, int tpId)
+        {
+            ViewData["id"] = new SelectList(_context.Employee, "Id", "Id");
+            return View();
+        }
+
+        // POST: Comments/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost("Employees/AddTProgram/{tpId}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddTProgram(int id, int tpId,
+            [Bind("Id,TrainingProgramId,EmployeeId")] Employee employee)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(employee);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Employees", new { id = employee.Id });
+            }
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "Id", employee.Id);
+            ViewData["TrainingProgramId"] = new SelectList(_context.Employee, "Id", "Id", tpId);
+            return View(employee);
+        }
+
 
         private bool EmployeeExists(int id)
         {

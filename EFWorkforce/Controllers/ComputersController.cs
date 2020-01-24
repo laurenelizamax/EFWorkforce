@@ -20,10 +20,22 @@ namespace EFWorkforce.Controllers
         }
 
         // GET: Computers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery)
         {
-            return View(await _context.Computer.ToListAsync());
+            if (searchQuery == null)
+            {
+                return View(await _context.Computer
+                       .ToListAsync());
+            }
+            else
+            {
+                //searchQuery = searchQuery;
+                return View(await _context.Computer
+              .Where(c => c.Make.Contains(searchQuery))
+              .Where(c => c.Model.Contains(searchQuery))
+                    .ToListAsync());
 
+            }
         }
 
         // GET: Computers/Details/5

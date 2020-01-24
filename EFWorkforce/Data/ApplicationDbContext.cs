@@ -16,7 +16,7 @@ namespace EFWorkforce.Data
         public DbSet<Department> Department { get; set; }
 
         public DbSet<Computer> Computer { get; set; }
-
-        public DbSet<EFWorkforce.Models.TrainingProgram> TrainingProgram { get; set; }
+        public DbSet<EmployeeTraining> EmployeeTraining { get; set; }
+        public DbSet<TrainingProgram> TrainingProgram { get; set; }
     }
 }

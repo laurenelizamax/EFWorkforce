@@ -23,14 +23,20 @@ namespace EFWorkforce.Controllers
         // GET: Departments
         public async Task<IActionResult> Index()
         {
-            var departments = _context.Department.Include(d => d.Employees);
+            //var departments = _context.Department.Include(d => d.Employees);
 
-            //var viewModel = new DepartmentIndexViewModel();
-            //viewModel.Departments = _context.Department.ToList();
-            //viewModel.EmployeeCounts = _context.Employee.Select(e => e.DepartmentId).ToList();
+            var departments = await _context.Department.Select(d => new DepartmentIndexViewModel
+            {
+                Id = d.Id,
+                Name = d.Name,
+                Budget = d.Budget,
+                EmployeeCount = d.Employees.Count()
+                }).ToListAsync();
+            return View(departments);
 
-            return View(await departments.ToListAsync());
-        }
+    }
+
+
 
         // GET: Departments/Details/5
         public async Task<IActionResult> Details(int? id)

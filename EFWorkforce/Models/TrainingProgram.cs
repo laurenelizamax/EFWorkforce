@@ -12,6 +12,7 @@ namespace EFWorkforce.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int MaxAttendees { get; set; }
-        
+        public List<EmployeeTraining> EmployeeTrainings { get; set; }
+
     }
 }
