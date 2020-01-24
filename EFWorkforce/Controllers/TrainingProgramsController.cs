@@ -42,7 +42,8 @@ namespace EFWorkforce.Controllers
             }
 
             var trainingProgram = await _context.TrainingProgram
-                //.Include(tp => tp.)
+                .Include(tp => tp.EmployeeTrainings)
+                .ThenInclude(et => et.Employee)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (trainingProgram == null)
             {

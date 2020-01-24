@@ -26,5 +26,6 @@ namespace EFWorkforce.Models
         public Department Department { get; set; }
         public Computer Computer { get; set; }
         public string Email { get; set; }
+        public List<EmployeeTraining> EmployeeTrainings { get; set; }
     }
 }
